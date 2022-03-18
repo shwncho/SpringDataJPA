@@ -69,4 +69,37 @@ class MemberJpaRepositoryTest {
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result.size()).isEqualTo(1);
     }
+
+    @Test
+    public void paging(){
+        //given
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member1",10));
+        memberJpaRepository.save(new Member("member1",10));
+
+        int age = 10;
+        int offset = 0;
+        int limit = 3;
+
+        //when
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(age);
+
+        //페이지 계산 공식 적용...
+        // totalPage = totalCount / size ...
+        // 마지막 페이지 ...
+        // 최초 페이지 ..
+        //-> 고대 선배들의 방식이다...ㅋㅋ Spring Data Jpa는 더 좋은 기능이 있다.
+
+        //then
+
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(5);
+
+
+
+    }
+
 }
